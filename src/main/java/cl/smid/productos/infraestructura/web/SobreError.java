@@ -1,6 +1,7 @@
 package cl.smid.productos.infraestructura.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -22,13 +23,25 @@ import java.util.List;
  * @param timestamp instante UTC en ISO-8601.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(description = "Sobre de error unificado del ecosistema SMID.")
 public record SobreError(
+        @Schema(description = "Código HTTP numérico.", example = "409")
         int status,
+        @Schema(description = "Título legible del error.", example = "Conflicto de estado")
         String error,
+        @Schema(description = "Código estable del error.", example = "PRD-409",
+                allowableValues = {"AUTZ-003", "AUTZ-004", "PRD-001", "PRD-404", "PRD-409",
+                        "PRD-422", "PRD-500"})
         String codigo,
+        @Schema(description = "Mensaje legible para el consumidor.",
+                example = "No se puede editar un producto en estado EMITIDO")
         String mensaje,
+        @Schema(description = "Detalle por campo, solo en errores de validación.",
+                example = "[\"titulo: titulo es obligatorio\"]")
         List<String> detalles,
+        @Schema(description = "Ruta solicitada.", example = "/productos/productos/b2d9d6ec-f0de-4df7-aee6-3f7106e7da54")
         String ruta,
+        @Schema(description = "Instante UTC del error.", example = "2027-03-15T12:00:00Z")
         String timestamp
 ) {
     /** Construye un sobre fijando el {@code timestamp} al instante actual en ISO-8601 UTC. */

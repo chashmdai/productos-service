@@ -16,6 +16,7 @@ desde Casos y Personas.
 - **MySQL 8** (InnoDB, `utf8mb4_0900_ai_ci`), **Flyway** (`ddl-auto=validate`).
 - **JWT** con `jjwt 0.12.5` (HS256 con `kid`).
 - **RabbitMQ** para eventos (transporte conmutable con publicación por log).
+- **SpringDoc OpenAPI 2.8.x** (Swagger UI).
 - **Testcontainers** para integración y concurrencia.
 
 Coordenadas: `groupId` `cl.smid`, `artifactId` `productos-service`, paquete base
@@ -139,6 +140,13 @@ usa los clientes de enriquecimiento: hereda sede/unidad de los metadatos del pro
 
 Todas las rutas exigen `Authorization: Bearer <jwt>` (salvo `/actuator/health`). Rutas relativas al
 servicio (tras el `StripPrefix`):
+Swagger documenta las rutas internas del servicio (`/productos/**`); el frontend consume siempre vía
+Gateway anteponiendo `/api`, por ejemplo `/api/productos/productos` y `/api/productos/tareas`.
+
+Documentación local:
+
+- `GET /v3/api-docs`
+- `GET /swagger-ui/index.html`
 
 | Método      | Ruta                                          | Descripción                              |
 |-------------|-----------------------------------------------|------------------------------------------|
