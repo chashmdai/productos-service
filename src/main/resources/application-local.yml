@@ -1,0 +1,30 @@
+# Perfil de desarrollo local. Activar con: --spring.profiles.active=local
+# Publicacion por log y sin consumo de eventos: NO requiere RabbitMQ.
+# Enriquecimiento desactivado: NO requiere los servicios de Casos/Personas.
+# Requiere unicamente MySQL con la base db_productos creada.
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_productos?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&tinyInt1isBit=true&characterEncoding=utf8
+    username: smid
+    password: smid
+
+smid:
+  seguridad:
+    kid-activo: smid-2026-06
+    # Secreto de DEMO (>= 32 bytes). REEMPLAZAR en cualquier entorno real.
+    secreto-activo: clave-demo-local-super-secreta-0123456789-ABCDEF
+    issuer: smid-auth
+    audiencia: smid-servicios
+    roles-coordinacion: COORDINACION,COORDINADOR
+
+  eventos:
+    transporte: log
+    consumo: none
+
+  enriquecimiento:
+    casos: false
+    personas: false
+
+  sedes:
+    defecto: STG

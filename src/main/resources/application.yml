@@ -1,0 +1,82 @@
+server:
+  port: ${SERVER_PORT:8092}
+
+spring:
+  application:
+    name: productos-service
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/db_productos?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&tinyInt1isBit=true&characterEncoding=utf8}
+    username: ${DB_USERNAME:smid}
+    password: ${DB_PASSWORD:smid}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      "[hibernate.jdbc.time_zone]": UTC
+      "[hibernate.format_sql]": false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    listener:
+      simple:
+        acknowledge-mode: auto
+        default-requeue-rejected: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    rabbit:
+      enabled: ${RABBITMQ_HEALTH:false}
+
+smid:
+  seguridad:
+    kid-activo: ${JWT_KID_ACTIVO:smid-2026-06}
+    secreto-activo: ${JWT_SECRET_ACTIVO}
+    kid-previo: ${JWT_KID_PREVIO:}
+    secreto-previo: ${JWT_SECRET_PREVIO:}
+    issuer: ${JWT_ISSUER:smid-auth}
+    audiencia: ${JWT_AUDIENCIA:smid-servicios}
+    roles-coordinacion: ${ROLES_COORDINACION:COORDINACION,COORDINADOR}
+
+  eventos:
+    # transporte de publicacion: log | rabbitmq
+    transporte: ${EVENTOS_TRANSPORTE:log}
+    # consumo de caso.abierto: none | rabbitmq
+    consumo: ${EVENTOS_CONSUMO:none}
+
+  enriquecimiento:
+    casos: ${ENRIQUECIMIENTO_CASOS:false}
+    personas: ${ENRIQUECIMIENTO_PERSONAS:false}
+    casos-url-base: ${CASOS_URL_BASE:}
+    personas-url-base: ${PERSONAS_URL_BASE:}
+
+  sedes:
+    defecto: ${SEDE_CODIGO_DEFECTO:STG}
+    # Mapa alt_key -> codigo corto. En YAML use notacion de corchetes para las claves UUID, p. ej.:
+    # codigos:
+    #   "[11111111-1111-1111-1111-111111111111]": STGO
+    codigos: {}
